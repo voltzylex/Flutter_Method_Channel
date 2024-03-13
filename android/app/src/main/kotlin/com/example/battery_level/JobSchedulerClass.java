@@ -6,6 +6,7 @@ import android.app.job.JobScheduler;
 import android.app.job.JobService;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -66,9 +67,17 @@ public class JobSchedulerClass extends JobService {
                         handler.post(new Runnable() {
                             @Override
                             public void run() {
+
                                 //Perform your task here
                                 Log.i("Media Created", "Media Captured!");
                                     ShowNotification.showNotification(mContext,"Sunil sir",uri.toString());
+                                SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                int count = sharedPreferences.getInt("count",0);
+                                count = count+1;
+                                editor.putString("myKey", "Data is stored "+count );
+                                editor.putInt("count",count);
+                                editor.apply();
                             }
                         });
                     }

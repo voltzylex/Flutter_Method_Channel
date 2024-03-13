@@ -24,9 +24,13 @@ class MainActivity : FlutterActivity() {
         return batteryManager.getIntProperty(/* id = */ BatteryManager.BATTERY_PROPERTY_CAPACITY)
     }
 
+
+
+
     private val CHANNEL = "batteryLevel";
     private val methodColor = "method/color";
     private val backgroundMedia = "background/media";
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
 
@@ -36,53 +40,76 @@ class MainActivity : FlutterActivity() {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NOTIFICATION_POLICY) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_NOTIFICATION_POLICY), 101)
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_NOTIFICATION_POLICY
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.ACCESS_NOTIFICATION_POLICY),
+                    101
+                )
             }
         }
-
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
-            CHANNEL
+            backgroundMedia
         ).setMethodCallHandler { call, result ->
-            if (call.method == "getBatteryLevel") {
-                val batteryLevel = getBatteryLevel(this)
-
-                if (batteryLevel != -1) {
-                    result.success(batteryLevel)
-                } else {
-                    result.error("UNAVAILABLE", "Battery level not available.", null)
-                }
-            } else {
+            if (call.method == "getStorage") {
+                val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+               var savedValue = sharedPreferences.getString("myKey", "DefaultValueIfKeyNotFound");
+                result.success(
+                    savedValue
+                );
+            }else{
                 result.notImplemented()
             }
-        }
-        MethodChannel(
-            flutterEngine.dartExecutor.binaryMessenger,
-            methodColor
-        ).setMethodCallHandler { call, result ->
-            if (call.method == "getColor") {
-                result.success("0xffFE8C00");
             }
-            if (call.method == "getObject") {
-                val resultMap: MutableMap<String, Any> = HashMap()
-                resultMap["success"] = false
-                resultMap["name"] = "nitesh sir"
-                result.success(
-                    resultMap
+
+
+            MethodChannel(
+                flutterEngine.dartExecutor.binaryMessenger,
+                CHANNEL
+            ).setMethodCallHandler { call, result ->
+                if (call.method == "getBatteryLevel") {
+                    val batteryLevel = getBatteryLevel(this)
+
+                    if (batteryLevel != -1) {
+                        result.success(batteryLevel)
+                    } else {
+                        result.error("UNAVAILABLE", "Battery level not available.", null)
+                    }
+                } else {
+                    result.notImplemented()
+                }
+            }
+            MethodChannel(
+                flutterEngine.dartExecutor.binaryMessenger,
+                methodColor
+            ).setMethodCallHandler { call, result ->
+                if (call.method == "getColor") {
+                    result.success("0xffFE8C00");
+                }
+                if (call.method == "getObject") {
+                    val resultMap: MutableMap<String, Any> = HashMap()
+                    resultMap["success"] = false
+                    resultMap["name"] = "nitesh sir"
+                    result.success(
+                        resultMap
 //                    hashMapOf(
 //                        "success" to true,
 //                        "name" to "manish"
 //                    )
-                );
-            } else {
-                result.success("0xff53B781");
+                    );
+                } else {
+                    result.success("0xff53B781");
+                }
+
             }
 
         }
-
     }
-}
 
 
 
