@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
 import android.os.BatteryManager
+import android.os.Build
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -31,6 +32,15 @@ class MainActivity: FlutterActivity() {
                     } else {
                         result.error("UNAVAILABLE", "Battery level not available.", null)
                     }
+                }
+             // Get Device Info
+                "getDeviceInfo" ->{
+                    val dev = Build.MODEL;
+                    val d = Build.VERSION.RELEASE;
+                    val map = HashMap<String,String>();
+                    map["model"] = dev;
+                    map["version"] = d;
+                    result.success(map);
                 }
                 else -> {
                     result.notImplemented()

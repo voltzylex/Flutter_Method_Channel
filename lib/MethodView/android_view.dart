@@ -44,6 +44,14 @@ class _AndroidNativeViewState extends State<AndroidNativeView> {
                 child: const Text('Get String'),
               ),
               const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  method.getDeviceInfo();
+                  setState(() {});
+                },
+                child: const Text('Get Device Info'),
+              ),
+              const SizedBox(height: 20),
               Text(
                 method.result,
                 style: const TextStyle(fontSize: 20),

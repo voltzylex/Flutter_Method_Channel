@@ -34,4 +34,11 @@ class BasicMethod {
       result = "Failed to Get String : ${e.message}";
     }
   }
+
+  // Get Version from native Through map
+  Future<void> getDeviceInfo() async {
+    final info = await platform.invokeMethod("getDeviceInfo");
+    print(info);
+    print("Info type is ${info.runtimeType}");
+  }
 }
