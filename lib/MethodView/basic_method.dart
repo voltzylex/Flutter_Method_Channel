@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -5,6 +7,7 @@ class BasicMethod {
   static const platform = MethodChannel('com.example.yourapp/native');
   String result = '';
   Color color = Colors.white; // Default color
+  Map<String, String> info = {};
 
   Future<void> changeColor() async {
     try {
@@ -37,8 +40,14 @@ class BasicMethod {
 
   // Get Version from native Through map
   Future<void> getDeviceInfo() async {
-    final info = await platform.invokeMethod("getDeviceInfo");
-    print(info);
-    print("Info type is ${info.runtimeType}");
+    try {
+      final Map info = await platform.invokeMethod("getDeviceInfo");
+      this.info = Map<String, String>.from(info);
+      // this.info = info;
+      print(info);
+      log("Info type is ${this.info.runtimeType}");
+    } on PlatformException catch (e) {
+      log("Device info : ${e.message}");
+    }
   }
 }

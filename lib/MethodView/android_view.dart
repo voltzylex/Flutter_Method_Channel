@@ -56,6 +56,11 @@ class _AndroidNativeViewState extends State<AndroidNativeView> {
                 method.result,
                 style: const TextStyle(fontSize: 20),
               ),
+              const SizedBox(height: 5),
+              Text(
+                "Version : ${method.info["version"]}, Model : ${method.info["model"]}",
+                style: const TextStyle(fontSize: 20),
+              ),
             ],
           ),
         ),
