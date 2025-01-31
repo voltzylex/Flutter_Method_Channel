@@ -1,6 +1,6 @@
 {
-    "name": "battery_level",
-    "short_name": "battery_level",
+    "name": "method_channel_demo",
+    "short_name": "method_channel_demo",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
