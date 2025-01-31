@@ -15,4 +15,8 @@
     <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <item name="android:windowBackground">?android:colorBackground</item>
     </style>
+    <!-- Use this theme for SecondActivity -->
+    <style name="SecondActivityTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize the theme for SecondActivity -->
+    </style>
 </resources>
