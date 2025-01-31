@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:method_channel_demo/screens/method_channel_data.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,120 +13,80 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.teal),
-      home: const MethodChannelDemo(),
+      home: const HomeScreen(),
     );
   }
 }
 
-class MethodChannelDemo extends StatefulWidget {
-  const MethodChannelDemo({super.key});
-
-  @override
-  State<MethodChannelDemo> createState() => _MethodChannelDemoState();
-}
-
-class _MethodChannelDemoState extends State<MethodChannelDemo> {
-  static const platform = MethodChannel('com.example.methodchannel/native');
-
-  final ValueNotifier<String> messageNotifier =
-      ValueNotifier<String>("Click the button to get a message from Android");
-
-  Future<void> getMessageFromNative() async {
-    try {
-      final String result = await platform.invokeMethod('getMessage');
-      messageNotifier.value = result;
-    } on PlatformException catch (e) {
-      messageNotifier.value = "Failed to get message: '${e.message}'";
-    }
-  }
-
-  Future<void> getPerson() async {
-    try {
-      final String result = await platform.invokeMethod('getPerson');
-      messageNotifier.value = result;
-    } on PlatformException catch (e) {
-      messageNotifier.value = "Failed to get person: '$e'";
-    }
-  }
-
-  Future<void> sendName(String name) async {
-    try {
-      final String result =
-          await platform.invokeMethod("getUserGreeting", name);
-      messageNotifier.value = result;
-    } on PlatformException catch (e) {
-      messageNotifier.value = "Failed to send name: '$e'";
-    }
-  }
-
-  Future<void> sendMapName(String name) async {
-    try {
-      final Map<String, String> args = {"name": name};
-      final result = await platform.invokeMethod("getMap", args);
-      final res = result as Map;
-      messageNotifier.value = res.toString();
-    } on PlatformException catch (e) {
-      messageNotifier.value = "Failed to send map: '$e'";
-    }
-  }
-
-  @override
-  void dispose() {
-    messageNotifier.dispose();
-    super.dispose();
-  }
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Method Channel Demo')),
+      appBar: AppBar(title: const Text('Task Navigation')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ValueListenableBuilder<String>(
-              valueListenable: messageNotifier,
-              builder: (context, message, _) {
-                return Text(
-                  message,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w500),
-                );
-              },
-            ),
-            const SizedBox(height: 30),
-            ElevatedButton.icon(
-              onPressed: getMessageFromNative,
-              icon: const Icon(Icons.message),
-              label: const Text('Get Message'),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton.icon(
-              onPressed: getPerson,
-              icon: const Icon(Icons.person),
-              label: const Text('Get Person'),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              onSubmitted: sendName,
-              decoration: InputDecoration(
-                hintText: "Enter name",
-                prefixIcon: const Icon(Icons.person_outline),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton.icon(
-              onPressed: () => sendMapName("Sushil"),
-              icon: const Icon(Icons.map),
-              label: const Text('Send Map Data'),
+            TaskButton(
+                title: "Task 1", page: const TaskScreen(title: "Task 1")),
+            TaskButton(
+                title: "Task 2", page: const TaskScreen(title: "Task 2")),
+            TaskButton(
+                title: "Task 3", page: const TaskScreen(title: "Task 3")),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TaskButton(
+                    title: "Method Channel Demo",
+                    page: const MethodChannelData()),
+              ],
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class TaskButton extends StatelessWidget {
+  final String title;
+  final Widget page;
+
+  const TaskButton({super.key, required this.title, required this.page});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.symmetric(vertical: 14),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => page),
+        ),
+        child: Text(title, style: const TextStyle(fontSize: 18)),
+      ),
+    );
+  }
+}
+
+class TaskScreen extends StatelessWidget {
+  final String title;
+  const TaskScreen({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: Center(
+        child: Text("This is $title", style: const TextStyle(fontSize: 22)),
       ),
     );
   }
