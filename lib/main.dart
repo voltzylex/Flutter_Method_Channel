@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:method_channel_demo/screens/activity_channel_view.dart';
 import 'package:method_channel_demo/screens/method_channel_data.dart';
+import 'package:method_channel_demo/screens/native_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,8 +33,7 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TaskButton(title: "New Activity", page: NewActivityDemo()),
-            TaskButton(
-                title: "Task 2", page: const TaskScreen(title: "Task 2")),
+            TaskButton(title: "Native View", page: NativeView()),
             TaskButton(
                 title: "Task 3", page: const TaskScreen(title: "Task 3")),
             Row(

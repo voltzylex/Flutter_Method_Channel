@@ -19,4 +19,8 @@
     <style name="SecondActivityTheme" parent="Theme.AppCompat.Light">
         <!-- Customize the theme for SecondActivity -->
     </style>
+
+    <style name="Widget.Theme.Android.MyView" parent="">
+        <item name="android:background">@color/gray_400</item>
+    </style>
 </resources>

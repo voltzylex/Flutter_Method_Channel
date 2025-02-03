@@ -15,4 +15,8 @@
     <style name="NormalTheme" parent="@android:style/Theme.Black.NoTitleBar">
         <item name="android:windowBackground">?android:colorBackground</item>
     </style>
+
+    <style name="Widget.Theme.Android.MyView" parent="">
+        <item name="android:background">@color/gray_600</item>
+    </style>
 </resources>

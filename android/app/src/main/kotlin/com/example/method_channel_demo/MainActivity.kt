@@ -1,10 +1,10 @@
 package com.example.method_channel_demo
 
 import android.content.Intent
-import android.os.Bundle
+import com.example.nativetextviewdemo.NativeComplexViewFactory
+import com.example.nativetextviewdemo.NativeTextViewFactory
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
     private val CHANNEL = "com.example.methodchannel/native"
@@ -13,6 +13,12 @@ class MainActivity : FlutterActivity() {
 
         super.configureFlutterEngine(flutterEngine)
     MethodChannelHandler(this,flutterEngine);
+        // Register the native view with an arbitrary string identifier.
+        flutterEngine
+            .platformViewsController
+            .registry
+            .registerViewFactory("native-text-view", NativeTextViewFactory())
+        flutterEngine.platformViewsController.registry.registerViewFactory("native-complex-view",NativeComplexViewFactory())
 
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
